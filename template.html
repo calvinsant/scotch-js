@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<style>
+		body{background-color: #efefefef;}
+		.accordion{
+			background:#fff;
+			border-radius: 5px;
+			padding:30px;
+		}
+		.question{
+			border-top:1px solid grey;
+			padding:20px;
+			cursor:pointer;
+			position:relative;
+		}
+		.question h2{
+			font-size: 20px;
+			margin:0;
+			color:#C00C00;
+		}
+		.question .fas{
+			border:solid 1px;
+			width:20px;
+			height: 20px;
+			position:absolute;
+			right:20px;
+			display:flex;
+			align-items: center;
+		}
+		.answer{
+			transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) all;
+			max-height: 0;
+			overflow:hidden;
+		}
+		.answer p{
+			padding:20px;
+		}
+		.accordion li.open .answer{
+			max-height:150px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="accordion">
+			<ul class="list-unstyled">
+				<li>
+					<div class="question">
+						<h2>Will I be rich?</h2>
+						<i class="fas fa-arrow-down"></i>
+					</div>
+					<div class="answer">
+						<p>absolutely! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis exercitationem, delectus nemo totam atque non magnam sapiente voluptatum, voluptas, sit amet deserunt aliquid quos optio molestias dolorum magni odio voluptates.</p>
+					</div>
+				</li>
+				<li>
+					<div class="question">
+						<h2>What is for dinner?</h2>
+						<i class="fas fa-arrow-down"></i>
+					</div>
+					<div class="answer">
+						<p>absolutely! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis exercitationem, delectus nemo totam atque non magnam sapiente voluptatum, voluptas, sit amet deserunt aliquid quos optio molestias dolorum magni odio voluptates.</p>
+					</div>
+				</li>
+				<li>
+					<div class="question">
+						<h2>Fuck you?</h2>
+						<i class="fas fa-arrow-down"></i>
+					</div>
+					<div class="answer">
+						<p>absolutely! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis exercitationem, delectus nemo totam atque non magnam sapiente voluptatum, voluptas, sit amet deserunt aliquid quos optio molestias dolorum magni odio voluptates.</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script>
+		const accordion = document.querySelector('.accordion');
+		const items     = accordion.querySelectorAll('li');
+		const questions = accordion.querySelectorAll('.question');
+
+		function toggleAccordion(){
+
+			//get parent of the item being clicked
+			const thisItem = this.parentNode;
+			//check constant items agains clicked item, if the same toggle open class, if not remove class.				
+			items.forEach(item => {
+				if(thisItem == item){
+					thisItem.classList.toggle('open');
+					return;
+				}else{
+					item.classList.remove('open');
+				}
+			});
+		}
+
+		questions.forEach(question => question.addEventListener('click', toggleAccordion));
+	</script>
+</body>
+</html>

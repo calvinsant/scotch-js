@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My attempt</title>
+	<style>
+		body{padding:30px;}
+	</style>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+</head>
+<body>
+	<div class="jumbotron">
+		<div class="form-group">
+			<h2>HOW MUCH DO PIES COST</h2>
+			<h4>Price</h4>
+			<input type="input" class="form-control" value="30" name="price">
+		</div>
+		<div class="form-group">
+			<h4>Quantity</h4>
+			<span class="label label-primary quantity-label"></span>
+			<input type="range" class="form-control" name="quantity" min="1" max="10" step="1" value="1">
+		</div>
+		<h1 class="text-right"></h1>
+	</div>
+	<script type="text/javascript">
+		//GET ALL INPUTS
+		const priceInput = document.querySelector('[name=price]');
+		const quantityLabel = document.querySelector('.quantity-label');
+		const quantityInput = document.querySelector('[type=range]');
+		const totalLabel = document.querySelector('h1');
+
+		//CREATE ALL FUNCTIONS
+		function calculatePieCost(){
+			const price = priceInput.value;
+			const quantity = quantityInput.value;
+			total = price * quantity;
+			totalLabel.innerText = '$' + total.toFixed(2);
+		}
+		function updateQuantityLabel(){
+			const quantity = quantityInput.value;
+			quantityLabel.innerText = quantity;
+		}
+		updateQuantityLabel();
+		calculatePieCost();
+		//CREATE ALL LISTENING EVENTS
+		priceInput.addEventListener('input', calculatePieCost);
+		quantityInput.addEventListener('input',calculatePieCost);
+		quantityInput.addEventListener('input', updateQuantityLabel);
+	</script>
+</body>
+</html>

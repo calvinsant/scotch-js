@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My attempt</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<style>
+	h2{
+		color:#C00C00;
+	}
+		h2,p{
+			padding:20px;
+			margin:0;
+		}
+		ul li{
+			border-bottom: 1px solid grey;
+			background:white;
+			margin:0;
+		}
+		.question{
+			cursor: pointer;
+			transition: 1s ease all;
+		}
+		.question:hover{
+			background:#a9a9a9;
+		}
+		.answer{
+			max-height: 0px;
+			overflow: hidden;
+			transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) all;
+		}
+		.accordion ul li.open .answer{
+			max-height: 150px;
+		}
+	</style>
+</head>
+<body>
+	<div class="jumbotron">
+		<div class="accordion">
+			<ul class="list-unstyled">
+				<li>
+					<h2 class="question">temp question</h2>
+					<i class="fa"></i>
+					<div class="answer">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+						tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+						quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+						consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+						cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+						proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</div>
+				</li>
+				<li>
+					<h2 class="question">temp question</h2>
+					<i class="fa"></i>
+					<div class="answer">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+						tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+						quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+						consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+						cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+						proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</div>
+				</li>
+				<li>
+					<h2 class="question">temp question</h2>
+					<div class="answer">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+						tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+						quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+						consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+						cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+						proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script>
+		//Get constant variables
+		const accordion = document.querySelector('.accordion');
+		const questions = accordion.querySelectorAll('.question');
+		const items     = accordion.querySelectorAll('li');
+
+		//Create functions
+		//Keep accordions open
+		function toggleAccordionOpen(){
+			this.parentNode.classList.toggle('open');
+		}
+		//Close accordions when viewing other
+		function toggleAccordionClosed(){
+			thisItem = this.parentNode;
+
+			items.forEach(item => {
+				if(thisItem == item){
+					thisItem.classList.toggle('open');
+				}else{
+					item.classList.remove('open');
+				}
+			});
+
+		}
+		
+		//Create event listeners
+		questions.forEach(question => question.addEventListener('click', toggleAccordionClosed));
+	</script>
+</body>
+</html>

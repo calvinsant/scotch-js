@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My Attempt</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<style>
+		.timer{
+			font-size: 100px;
+		}
+	</style>
+</head>
+<body>
+	<div class="jumbotron text-center">
+		<div class="timer">
+			<span class="minutes">00</span>
+			:
+			<span class="seconds">00</span>
+			<div class="timer-buttons">
+				<button class="btn btn-large btn-success" data-action="start">START</button>
+				<button class="btn btn-large btn-danger" data-action="stop">STOP</button>
+				<button class="btn btn-link btn-block" data-action="reset">reset</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		//grab all inputs and create let variables
+		const startButton = document.querySelector('[data-action="start"]');
+		const stopButton = document.querySelector('[data-action="stop"]');
+		const resetButton = document.querySelector('[data-action="reset"]');
+		const minutes = document.querySelector('.minutes');
+		const seconds = document.querySelector('.seconds');
+		let time = 0;
+		let interval;
+		let isRunning = false;
+
+		//create functions
+		function startTimer(){
+			if(isRunning) return;
+			interval = setInterval(intervalTimer, 1000);
+			isRunning = true;
+		}
+		function stopTimer(){
+			if(!isRunning) return;
+			clearInterval(interval);
+			isRunning = false;
+		}
+		function resetTimer(){
+			stopTimer();
+			time = 0;
+			minutes.innerText = "00";
+			seconds.innerText = "00";
+		}
+		function intervalTimer(){
+			time ++;
+			numberOfMinutes = Math.floor(time / 60);
+			numberOfSeconds = time % 60;
+
+			minutes.innerText = pad(numberOfMinutes);
+			seconds.innerText = pad(numberOfSeconds);
+		}
+		function pad(number){
+			return number < 10 ? '0' + number : number;
+		}
+		//add event listeners
+		startButton.addEventListener('click', startTimer);
+		stopButton.addEventListener('click', stopTimer);
+		resetButton.addEventListener('click', resetTimer);
+	</script>
+</body>
+</html>

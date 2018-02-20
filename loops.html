@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Getting Started</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
+	<style>
+		body{
+			padding:30px;
+		}
+	</style>
+</head>
+<body>
+	<div class="dogs-list"></div>
+	<!-- start javascript -->
+	<script>
+		//loop through array of objects and write
+		// if, else if and else
+		//for
+		//while
+		//do while
+		//for of iteration similar to foreach in php
+		
+		//Show dog name
+		//and dog type
+		//styled with added classes
+		
+		const container = document.querySelector('.dogs-list');
+		const dogs = [
+			{name:'caddin', type:'hound'},
+			{name:'vinny', type:'husky'}
+		];
+
+		for(let dog of dogs){
+			const name = document.createElement('h2');
+			name.classList.add('jumbotron','text-center');
+
+			const type = document.createElement('p');
+			type.classList.add('text-center');
+
+			name.innerText = dogs.name;
+			type.innerText = dogs.type;
+
+			container.appendChild(name);
+			container.appendChild(type);
+		}
+
+	</script>
+</body>
+</html>

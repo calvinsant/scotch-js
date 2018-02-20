@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My attempt</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<style>
+		/*give position, width and transition effect*/
+		.btn-crazy{
+			position:absolute;
+			top:30px;
+			left:40%;
+			width:20%;
+			transition: 0.2s ease all;
+		}
+	</style>
+</head>
+<body>
+	<div><button class="btn-danger btn-crazy" type="button">CLICK ME</button></div>
+	<div><button class="btn-primary btn-crazy" type="button">CLICK ME</button></div>
+	<div><button class="btn-success btn-crazy" type="button">CLICK ME</button></div>
+
+	<script type="text/javascript">
+		//get buttons
+		const crazyButton = document.querySelectorAll('.btn-crazy');
+		//define function
+		function goCrazy(){
+			const offsetTop = Math.random() * (window.innerHeight - this.clientHeight) + 'px';
+			const offsetLeft = Math.random() * (window.innerWidth - this.clientWidth) + 'px';
+
+			this.style.top = offsetTop;
+			this.style.left = offsetLeft;
+
+			console.log(offsetTop, offsetLeft);
+		}
+		//add event listener
+		// crazyButton.addEventListener('mouseenter', goCrazy);
+		crazyButton.forEach(function(button){
+			button.addEventListener('mouseenter', goCrazy);
+		});
+
+	</script>
+</body>
+</html>
