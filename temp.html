@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Temp</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<style>
+		body{
+			background-color: black;
+			transition: ease;
+			color:white;
+		}
+		.overlay{
+			background-color:red;
+			position:fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			transition: ease;
+		}
+		.focused{
+			opacity: 1;
+			transition: ease;
+		}
+		.focused .url-input{
+			padding: 20px;
+		}
+		.bookmark-item{
+			border-bottom:solid 1px white;
+		}
+		.bookmark-list img{
+			background-size: cover;
+			background-position: center;
+			width: 100%;
+    height: 200px;
+		}
+		a{
+			color: white !important;
+			font-size: 40px;
+			cursor: pointer;
+		}
+	</style>
+
+</head>
+<body>
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<form action="">
+					<div>
+						<input class="url-input" type="text">
+					</div>
+					<div>
+						<input type="submit">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="bookmark-list row"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		//Focus in UX
+		const input = document.querySelector('.url-input');
+		const overlay = document.querySelector('.overlay');
+
+		function showOverlay(){
+			overlay.classList.add('focused');
+		}
+
+		function hideOverlay(){
+			if(overlay.classList.contains('focused')){
+				overlay.classList.remove('focused');
+			}else{
+				return;
+			}
+		}
+
+		input.addEventListener('focusin', showOverlay);
+		overlay.addEventListener('click', hideOverlay);
+		//Focus in UX end
+		//
+		
+		const apiUrl = "https://opengraph.io/api/1.1/site";
+		const apiKey = "5ab7fb0bc8869a6a06cf233e";
+		const form = document.querySelector('form');
+		const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+		const bookMarkList = document.querySelector('.bookmark-list');
+		bookmarkItem = document.querySelector('.bookmark-list');
+
+		createBookMarkList(bookmarks);
+
+		function createBookmark(e){
+			e.preventDefault();
+
+			fetch(`${apiUrl}/${input.value}?app_id=${apiKey}`).then(response => response.json()).then(data => {
+
+				console.log(data);
+
+				const bookmark = {
+					image: data.htmlInferred.images,
+					title: data.htmlInferred.title,
+					description: data.htmlInferred.description
+				}
+
+				bookmarks.push(bookmark);
+				storeBookmarks(bookmarks);
+				createBookMarkList(bookmarks);
+				// storeBookmarks(bookmarks);					
+			});
+		
+				form.reset();
+		}
+
+		function createBookMarkList(bookmarks){
+
+			bookMarkList.innerHTML = bookmarks.map((bookmark, i) => {
+				return `
+				<div class="bookmark-item col-9 p-5"">
+					<h1>${bookmark.title}</h1>
+					<p>${bookmark.description}</p>
+					<img style="background-image:url('${shuffle(bookmark.image)}')" />
+				</div>
+				<div class="col-2" id="${i}">
+					<a>X</a>
+				</div>
+				`;
+			});
+
+		}
+
+		function storeBookmarks(bookmarks){
+			localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+		}
+
+		function removeBookmark(e){
+			if(!e.target.matches('a')){
+				return;
+			}else{
+				const index = e.target.parentNode.id;
+				bookmarks.splice(index, 1);
+				createBookMarkList(bookmarks);
+				storeBookmarks(bookmarks);
+			}
+		}
+
+		//Tangent randomize array
+		function shuffle(array) {
+		  var currentIndex = array.length, temporaryValue, randomIndex;
+
+		  // While there remain elements to shuffle...
+		  while (0 !== currentIndex) {
+
+		    // Pick a remaining element...
+		    randomIndex = Math.floor(Math.random() * currentIndex);
+		    currentIndex -= 1;
+
+		    // And swap it with the current element.
+		    temporaryValue = array[currentIndex];
+		    array[currentIndex] = array[randomIndex];
+		    array[randomIndex] = temporaryValue;
+		  }
+
+		  return array[0];
+		}
+
+		form.addEventListener('submit', createBookmark);
+		bookmarkItem.addEventListener('click', removeBookmark);
+
+	</script>
+</body>
+</html>

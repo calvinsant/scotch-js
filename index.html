@@ -2,15 +2,183 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Getting Started</title>
-
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"> -->
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<title>Bookmark App</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/fontawesome-all.min.js"></script>
 	<style>
-		
+		body{
+			background-image: url('images/industrial.jpg');
+			background-repeat: no-repeat;
+		}
+		.overlay{
+			position:fixed;
+			top:0;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			opacity:0;
+			background-color: rgba(0,0,0,0.8);
+			transition: 0.3s ease opacity;
+		}
+		.content{
+			max-width: 500px;
+			margin:0 auto;
+		}
+		.floater{
+			top:80px;
+			position:relative;
+			margin-bottom: 100px;
+		}
+		.floater-top{
+		}
+		.floater-top input{
+			transition: 0.3s ease all;
+			padding:20px 10px;
+		}
+		.floater-bottom{
+			padding:30px 0px;
+			text-align: right;
+		}
+		.bookmark-list{
+			position: relative;
+		}
+		.bookmark-list .bookmark img{
+			width:80px;
+			height:80px;
+			background-size: cover;
+			background-position: center;
+			margin-right: 20px;
+		}
+		.bookmark{
+			position:relative;
+			background-color: white;
+			padding:20px;
+		}
+		.bookmark svg{
+			position:absolute;
+			top:5px;
+			right:5px;
+			z-index: 999;
+		}
+		.bookmark svg:hover{
+			cursor: pointer;
+		}
+		body.show-overlay .overlay{
+			opacity:1;
+		}
+		body.show-overlay .floater-top input{
+			transform:scale(1.1);
+			padding-top:30px;
+		}
 	</style>
 </head>
 <body>
-	
+	<div class="overlay"></div>
+	<div class="floater content">
+		<form action="">
+			<div class="floater-top">
+				<input class="form-control" type="text" placeholder="Enter bookmark URL">
+			</div>
+			<div class="floater-bottom">
+				<input type="submit" class="btn btn-primary btn-sm">
+			</div>
+		</form>
+	</div>
+	<div class="bookmark-list content">
+		<!-- <div class="bookmark form-control">
+			<img src="images/Santek-Logo-home.png" alt="">
+			<a href="">Bookmark Title goes here</a>
+			<i class="fas fa-times"></i>
+		</div> -->
+	</div>
+	<script>
+		//Show and hid overlay when entering URLs
+		const body = document.querySelector('body');
+		const input = document.querySelector('input[type=text]');
+		const overlay = document.querySelector('.overlay');
+
+		function showOverlay(){
+			body.classList.add('show-overlay');
+		}
+		function hideOverlay(){
+			if(body.classList.contains('show-overlay')){
+				body.classList.remove('show-overlay');
+			}
+		}
+
+		input.addEventListener('focusin', showOverlay);
+		overlay.addEventListener('click', hideOverlay);
+
+		//==============================================
+		
+		const bookmarkForm = document.querySelector('form');
+		const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+		const bookmarkList = document.querySelector('.bookmark-list');
+		const close = document.querySelector('.bookmark-list');
+		const apiUrl = "https://opengraph.io/api/1.1/site";
+		const apiKey = "5ab7fb0bc8869a6a06cf233e";
+
+		createBookmarkList(bookmarks);
+
+		function createBookmark(e){
+			e.preventDefault();
+
+			fetch(`${apiUrl}/${input.value}?app_id=${apiKey}`).then(response => response.json()).then(data => {
+					const bookmark = {
+						image: data.hybridGraph.image,
+						title: data.hybridGraph.title,
+						url: data.hybridGraph.url
+					}
+
+					bookmarks.push(bookmark);
+					createBookmarkList(bookmarks);
+					storeBookmarks(bookmarks);
+					bookmarkForm.reset();
+
+					console.log(data);
+			});
+		}
+
+		function createBookmarkList(){
+
+			bookmarkList.innerHTML = bookmarks.map(bookmark => {
+
+			});
+
+			bookmarkList.innerHTML = bookmarks.map((bookmark, i) => {
+
+				return `
+					<div class="bookmark form-control" id="${i}">
+						<img style="background-image:url('${bookmark.image}')"; alt="">
+						<a target="_blank" href="${bookmark.url}">${bookmark.title}</a>
+						<i class="fas fa-times"></i>
+					</div>
+				`;
+			});
+		}
+
+		function storeBookmarks(){
+			localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+		}
+
+		function removeBookmark(e){
+			if(!e.target.matches('.svg-inline--fa')){
+				return;
+			}else{
+				//Get index of clicked bookmark
+				const index = e.target.parentNode.dataset.id;
+				//remove clicked bookmark from bookmark list
+				bookmarks.splice(index,1);
+				//re-create bookmark list
+				createBookmarkList(bookmarks);
+				//Store new bookmark list to localStorage
+				storeBookmarks(bookmarks);
+			}
+		}
+
+		bookmarkForm.addEventListener('submit', createBookmark);
+		close.addEventListener('click', removeBookmark);
+
+	</script>
 </body>
 </html>
